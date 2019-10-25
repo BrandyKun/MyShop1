@@ -5,10 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Runtime.Caching;
 using MyShop.Core.Models;
+using MyShop.Core.Contracts;
 
 namespace MyShop.DataAccess.InMemory
 {
-    public class InMemoryRepository<T> where T : BaseEntity 
+    public class InMemoryRepository<T> : IRepository<T> where T : BaseEntity
     {
         ObjectCache cache = MemoryCache.Default;
         List<T> items;
@@ -19,7 +20,7 @@ namespace MyShop.DataAccess.InMemory
             ClassName = typeof(T).Name; //passing the class object(T) and extracting the name of the class
             //eg If Product class was passed, It would give you the name of the class
             items = cache[ClassName] as List<T>;
-            if (items==null)
+            if (items == null)
             {
                 items = new List<T>();
 
@@ -31,6 +32,10 @@ namespace MyShop.DataAccess.InMemory
             cache[ClassName] = items;
         }
 
+        public void DoSomething()
+        {
+
+        }
         public void Insert(T t)
         {
             items.Add(t);
@@ -53,7 +58,7 @@ namespace MyShop.DataAccess.InMemory
         public T Find(string Id)
         {
             T t = items.Find(i => i.Id == Id);
-            if ( t!=null)
+            if (t != null)
             {
                 return t;
             }
@@ -67,10 +72,10 @@ namespace MyShop.DataAccess.InMemory
             return items.AsQueryable();
         }
 
-        public void Delete (string Id)
+        public void Delete(string Id)
         {
             T tTodelete = items.Find(i => i.Id == Id);
-            if (tTodelete !=null)
+            if (tTodelete != null)
             {
                 items.Remove(tTodelete);
             }
