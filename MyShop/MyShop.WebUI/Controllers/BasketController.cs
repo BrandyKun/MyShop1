@@ -30,7 +30,7 @@ namespace MyShop.WebUI.Controllers
         public ActionResult RemoveFromBasket(string Id)
         {
             basketService.RemoveFromBasket(this.HttpContext, Id);
-            return View();
+            return RedirectToAction("Index");
         }
 
         public PartialViewResult BasketSummary()
